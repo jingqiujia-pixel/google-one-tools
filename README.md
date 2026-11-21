@@ -1,6 +1,6 @@
 # Google One 工具包（MuMu 模拟器 + Frida）
 
-> 本副本已脱敏：不含本机用户名/路径；设备序列号已掩码，Play offer token 已置为 `<REDACTED>`。
+**`g1.30tb`已在大部分区域下架，可以先搞搞3个月打折的Ultra 5X**
 
 通过 Frida 注入模拟器里的 Google One 进程，调用 Play BillingClient：
 **扫描账号可用的全部订阅 offer（免费/付费）**，以及**拉起任意 SKU 的 Play 收银台**（只弹出，不自动订阅）。
