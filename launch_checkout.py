@@ -19,6 +19,7 @@ launch_checkout.py —— 拉起任意 SKU 的 Play 收银台（只弹出，不�
 """
 import argparse
 import json
+import re
 import sys
 import time
 from pathlib import Path
@@ -32,6 +33,7 @@ def main():
     ap = argparse.ArgumentParser(description="拉起 Google One 任意 SKU 的 Play 收银台")
     ap.add_argument("serial", nargs="?", help="设备序列号，如 127.0.0.1:16384（多开时指定）")
     ap.add_argument("--sku", default=None, help="目标 SKU，如 g1.30tb；不填则用 launch_checkout.js 里的默认值")
+    ap.add_argument("--offer", default=None, help="指定 offerId（如 eft-12mo）；不填取第一个 offer")
     args = ap.parse_args()
 
     serial = one_common.setup(serial=args.serial)
@@ -54,8 +56,9 @@ def main():
 
     js = (HERE / "launch_checkout.js").read_text(encoding="utf-8")
     if args.sku:  # 命令行 --sku 覆盖 js 里的默认值
-        import re
         js = re.sub(r'var TARGET_PRODUCT = "[^"]+";', f'var TARGET_PRODUCT = "{args.sku}";', js, count=1)
+    if args.offer:
+        js = re.sub(r'var TARGET_OFFER = "[^"]*";', f'var TARGET_OFFER = "{args.offer}";', js, count=1)
 
     launched = {"p": None}
 

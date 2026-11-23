@@ -4,6 +4,7 @@
 // 结果通过 send() 事件发回：setup / products / offer / launched / purchase_cb 等。
 // 【不会自动点「订阅」】，弹出的收银台由人工确认。
 var TARGET_PRODUCT = "g1.20tb";   // ← 改这里换 SKU（见 README 的 SKU 对照表）
+var TARGET_OFFER = "";            // ← 留空=第一个 offer；填 offerId 可指定（如 eft-12mo）
 var MODULE_APK = "/data/local/tmp/module_521.apk";
 
 Java.perform(function () {
@@ -125,7 +126,7 @@ Java.perform(function () {
                 S({ ev: "offer", product: pid, id: String(o.getOfferId()),
                     micros: String(first.getPriceAmountMicros()),
                     period: String(first.getBillingPeriod()) });
-                if (pid === TARGET_PRODUCT && targetPd == null) { targetPd = pd; targetOffer = o; }
+                if (pid === TARGET_PRODUCT && targetPd == null && (!TARGET_OFFER || String(o.getOfferId()) === TARGET_OFFER)) { targetPd = pd; targetOffer = o; }
             }
         }
         if (!targetPd || !targetOffer) { S({ ev: "no_offer" }); return; }
